@@ -1,10 +1,10 @@
 from django.views import View
 from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.base import TemplateView
 from .models import Queue
 
-services = {'change_oil': 'Change oil', 'inflate_tires': 'Inflate tires', 'diagnostic': 'Get diagnostic test'}
+services = {'change_oil': 'Change oil', 'inflate_tires': 'Inflate tires', 'diagnostic': 'Get diagnostic'}
 
 
 class WelcomeView(View):
@@ -33,3 +33,10 @@ class ProcessingView(View):
         queue_len = {services[k]: len(v) for k, v in Queue.line_of_cars.items()}
         return render(request, "processing.html", context={'queue_len': queue_len})
 
+    def post(self, request, *args, **kwargs):
+        Queue.next()
+        return redirect('/processing')
+
+class NextView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'next.html', context={'next_ticket': Queue.next_ticket})
