@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
 <ul>
   {% for key, val in services.items %}
   <li>
@@ -5,3 +7,4 @@
   </li>
   {% endfor %}
 </ul>
+{% endblock content %}

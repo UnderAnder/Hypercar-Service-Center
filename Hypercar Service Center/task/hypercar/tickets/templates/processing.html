@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+  {% for key, val in queue_len.items %}
+    <div>
+      {{ key }}: {{ val }}
+    </div>
+  {% endfor %}
+    <form method="post">{% csrf_token %}
+      <button type="submit">Process next</button>
+    </form>
+{% endblock content %}
