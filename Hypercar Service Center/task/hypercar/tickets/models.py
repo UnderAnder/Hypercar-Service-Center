@@ -9,17 +9,17 @@ class Queue(models.Model):
     ticket_number = 0
     next_ticket = None
 
-    def tickets(cls, service):
+    def tickets(self, service):
         line_time = {'change_oil': 2, 'inflate_tires': 5, 'diagnostic': 30}
-        wait_for_line = {k: len(cls.line_of_cars[k]) * line_time[k] for k in cls.line_of_cars.keys()}
+        wait_for_line = {k: len(self.line_of_cars[k]) * line_time[k] for k in self.line_of_cars.keys()}
         wait_time = {'change_oil': wait_for_line['change_oil'],
                      'inflate_tires': wait_for_line['change_oil'] + wait_for_line['inflate_tires'],
                      'diagnostic': sum(wait_for_line.values())}
 
         Queue.ticket_number += 1
-        cls.next_ticket = cls.ticket_number if cls.next_ticket is None and Queue.ticket_number > 1 else None
-        cls.line_of_cars[service].append(cls.ticket_number)
-        return cls.ticket_number, wait_time[service]
+        self.next_ticket = self.ticket_number if Queue.next_ticket is None and Queue.ticket_number > 1 else None
+        self.line_of_cars[service].append(self.ticket_number)
+        return self.ticket_number, wait_time[service]
 
     @classmethod
     def next(cls):
